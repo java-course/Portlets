@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="database-config.xml"/>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages"/>
+    </bean>
+
+    
+
+    <!-- Default View Resolver -->
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="cache" value="false"/>
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+    <!-- Abstract Default Exception Handler -->
+
+    <bean id="defaultExceptionHandlerTemplate"
+          class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver" abstract="true">
+        <property name="defaultErrorView" value="defError"/>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="javax.portlet.PortletSecurityException">notAuthorized</prop>
+                <prop key="javax.portlet.UnavailableException">notAvailable</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="userDao" class="com.geminisystems.portlet.dao.UserDaoImpl">
+        <property name="template" ref="hibernateTemplate"/>
+    </bean>
+
+     <bean id="usersValidator" class="com.geminisystems.portlet.validator.UserValidator"/>
+</beans>
